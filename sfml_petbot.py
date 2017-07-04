@@ -1,21 +1,28 @@
 # -*- coding: utf-8 -*-i
+# NB: the IRC protocol limits message lengths to 512 bytes, not just the
+# message part but of course the whole command etc.
 import re
 import sys
 import socket
 import string
 import random
+from booksplitter import BookSplitter
 
 HOST = "irc.boxbox.org"
 PORT = 6667
-CHANNEL = "#petbot"
-NICK = "petbot"
-IDENT = "petbot"
-REALNAME = "kims petbot" 
+CHANNEL = "#bokbot"
+NICK = "bokbot"
+IDENT = "bokbot"
+REALNAME = "kims bokbot" 
 
 s=socket.socket()	
 s.connect((HOST, PORT))
-s.send("NICK %s\r\n" % NICK)
-s.send("USER %s %s bla :%s\r\n" % (IDENT, HOST, REALNAME))
+test = "NICK %s\r\n" % NICK
+s.send(test.encode())
+#s.send("NICK %s\r\n" % NICK)
+test = "USER %s %s plopp :%s\r\n" % (IDENT, HOST, REALNAME)
+s.send(test.encode())
+#s.send("USER %s %s plopp :%s\r\n" % (IDENT, HOST, REALNAME))
 # username hostname servername realname
 
 readbuffer = ""
@@ -23,7 +30,9 @@ joinStatus = False
 names = []
     
 def sendPRIVMSG(message):
-    s.send("PRIVMSG %s :%s\r\n" % (CHANNEL, message))
+    test = "PRIVMSG %s :%s\r\n" % (CHANNEL, message)
+    s.send(test.encode())
+    #s.send("PRIVMSG %s :%s\r\n" % (CHANNEL, message))
 
 def grabFirstNick(lineHere):
     num = lineHere.find("!")
@@ -44,20 +53,24 @@ def help():
     sendPRIVMSG("I will drown your sorrows, comfort you when you are in need, be the light in your darkest moments.")
     
 while 1:
-    readbuffer = readbuffer + s.recv(1024)
-    temp = string.split(readbuffer, "\r\n")
+    readbuffer = readbuffer + s.recv(1024).decode()
+    temp = readbuffer.split("\r\n")
     readbuffer = temp.pop()
-    print temp
+    print(temp)
 
     for line in temp:
 
         words = line.split(" ")       # split line into words
         if words[0] == "PING":
-            s.send("PONG %s\r\n" % words[1])
+            test = "PONG %s\r\n" % words[1]
+            s.send(test.encode())
+            #s.send("PONG %s\r\n" % words[1])
 
         elif words[1] == "001":
-            print u"Received WELCOME message. :)"
-            s.send("JOIN %s\r\n" % CHANNEL)
+            print(u"Received WELCOME message. :)")
+            test = "JOIN %s\r\n" % CHANNEL
+            s.send(test.encode())
+            #s.send("JOIN %s\r\n" % CHANNEL)
             joinStatus = True
 
         elif words[1] == "353":
@@ -74,10 +87,10 @@ while 1:
             names.remove(partingNick)
 
         elif words[1] == "KICK":                     # not tested yet
-            print "names before kick:", names
+            print("names before kick:", names)
             partingNick = words[3]
             names.remove(partingNick)
-            print "names after kick:", names
+            print("names after kick:", names)
             
         elif words[1] == "JOIN":
             joiningNick = grabFirstNick(line)
