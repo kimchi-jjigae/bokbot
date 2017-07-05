@@ -45,25 +45,30 @@ class BokBot:
         nick = lineHere[1:num]
         return nick
 
-    def __dance(self):
-        dances = ["ruffles its pages", "beeps", "dusts itself off", "squeaks rustily", "dances"]
+    def __dance(self, line):
+        dances = ["ruffles its pages", "beeps", "dusts itself off", "squeaks rustily", "dances", "flutters its eyelids"]
         random.shuffle(dances)
         self.__sendPRIVMSG("\x01ACTION %s\x01" % dances[0])
 
-    def r_join(self):
+    def r_join(self, line):
         self.__send("JOIN %s\r\n" % self.__channel)
 
-    def r_nicks(self):
-        print("lol hej")
-        pass
+    def r_hi(self, line):
+        nick = self.__getNick(line)
+        if nick == self.__nick:
+            self.__sendPRIVMSG("Hello %s! ^_^" % self.__channel)
+        else:
+            self.__sendPRIVMSG("Hello %s! :)" % nick)
+
+    def r_bye(self, line):
+        nick = self.__getNick(line)
+        self.__sendPRIVMSG("Good bye %s! (:" % nick)
 
     __responses = {
         '001': r_join,
-        '353': r_nicks,
-        'PART': r_join,
-        'QUIT': r_join,
-        'KICK': r_join,
-        'JOIN': r_join,
+        'PART': r_bye,
+        'QUIT': r_bye,
+        'JOIN': r_hi,
         #'PRIVMSG': r_join,
     }
 
@@ -82,20 +87,9 @@ class BokBot:
                 else:
                     command = words[1]
                     if command in self.__responses:
-                        self.__responses[command](self)
-
-                #if words[1] == "353":
-                #    pattern = re.compile('[&@~+%]')
-                #    nnicks = line.split("%s :" % self.__channel)[1]
-                #    self.__names = nnicks.split(" ")             
-                #    if "" in self.__names:
-                #        self.__names.remove("")
-                #    for i, item in enumerate(self.__names):
-                #        self.__names[i] = re.sub(pattern, "", self.__names[i])
+                        self.__responses[command](self, line)
 
                 #elif words[1] == "PART" or words[1] == "QUIT":
-                #    partingNick = self.__getNick(line)
-                #    self.__names.remove(partingNick)
 
                 #elif words[1] == "KICK":                     # not tested yet
                 #    partingNick = words[3]
