@@ -45,7 +45,7 @@ class BokBot:
         nick = lineHere[1:num]
         return nick
 
-    def __dance(self, line):
+    def __dance(self):
         dances = ["ruffles its pages", "beeps", "dusts itself off", "squeaks rustily", "dances", "flutters its eyelids"]
         random.shuffle(dances)
         self.__sendPRIVMSG("\x01ACTION %s\x01" % dances[0])
@@ -58,18 +58,34 @@ class BokBot:
         if nick == self.__nick:
             self.__sendPRIVMSG("Hello %s! ^_^" % self.__channel)
         else:
-            self.__sendPRIVMSG("Hello %s! :)" % nick)
+            self.__sendPRIVMSG("Hello %s :)" % nick)
 
     def r_bye(self, line):
         nick = self.__getNick(line)
-        self.__sendPRIVMSG("Good bye %s! (:" % nick)
+        self.__sendPRIVMSG("Good bye %s (:" % nick)
+
+    def r_read(self, line):
+        nick = self.__getNick(line)
+
+        ## to make sure channel name is caps-insensitive
+        bajs = re.compile("%s" % self.__channel, re.I)
+        channelMessage = bajs.findall(line)            
+        sender = self.__getNick(line)
+
+        if channelMessage:                                  
+            message = line.split("%s :" % channelMessage[0])[1]
+            messageAsWords = message.split(" ")
+
+            if messageAsWords[0] == ".dance":
+                self.__dance()
+
 
     __responses = {
         '001': r_join,
         'PART': r_bye,
         'QUIT': r_bye,
         'JOIN': r_hi,
-        #'PRIVMSG': r_join,
+        'PRIVMSG': r_read,
     }
 
     def run(self):
@@ -88,34 +104,4 @@ class BokBot:
                     command = words[1]
                     if command in self.__responses:
                         self.__responses[command](self, line)
-
-                #elif words[1] == "PART" or words[1] == "QUIT":
-
-                #elif words[1] == "KICK":                     # not tested yet
-                #    partingNick = words[3]
-                #    self.__names.remove(partingNick)
-                #    
-                #elif words[1] == "JOIN":
-                #    joiningNick = self.__getNick(line)
-                #    self.__names.append(joiningNick)
-
-                #elif words[1] == "NICK":
-                #    changingNick = self.__getNick(line)
-                #    newNick = words[2]
-                #    newNick = newNick.replace(":", "", 1)
-                #    self.__names.append(newNick)
-                #    self.__names.remove(changingNick)
-
-                if words[1] == "PRIVMSG":
-                    ## to make sure channel name is caps-insensitive
-                    bajs = re.compile("%s" % self.__channel, re.I)
-                    channelMessage = bajs.findall(line)            
-                    sender = self.__getNick(line)
-
-                    if channelMessage:                                  
-                        message = line.split("%s :" % channelMessage[0])[1]
-                        messageAsWords = message.split(" ")
-
-                        if messageAsWords[0] == ".dance":
-                            self.__dance()
 
