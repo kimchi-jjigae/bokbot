@@ -54,18 +54,35 @@ class BokBot:
     def a_next(self, message_words):
         self.__sendPRIVMSG("Implement this command! (:")
 
-    def a_implement_me(self, message_words):
-        self.__sendPRIVMSG("Implement this command! :)")
+    def a_back(self, message_words):
+        self.__sendPRIVMSG("Implement this command! (:")
+
+    def a_define(self, message_words):
+        self.__sendPRIVMSG("Implement this command! (:")
+
+    def a_sentence(self, message_words):
+        self.__sendPRIVMSG("Implement this command! (:")
+
+    def a_add(self, message_words):
+        self.__sendPRIVMSG("Implement this command! (:")
+    def a_list(self, message_words):
+        self.__sendPRIVMSG("Implement this command! (:")
+    def a_load(self, message_words):
+        # change the topic to say what's being read
+        self.__sendPRIVMSG("Implement this command! (:")
+    def a_skipto(self, message_words):
+        self.__sendPRIVMSG("Implement this command! (:")
 
     __actions = {
         'dance': a_dance,
-        'back': a_implement_me,
-        'define': a_implement_me,
-        'sentence': a_implement_me,
-        'add': a_implement_me,
-        'list': a_implement_me,
-        'load': a_implement_me,
-        'skipto': a_implement_me,
+        'back': a_back,
+        'define': a_define,
+        'sentence': a_sentence,
+
+        'add': a_add,
+        'list': a_list,
+        'load': a_load,
+        'skipto': a_skipto,
     }
 
     def r_join(self, line):
@@ -95,7 +112,9 @@ class BokBot:
             message_words = message.split(" ")
 
             word1 = message_words[0]
-            if(word1.isdigit()):
+            if(word1 == "lol" or word1 == "haha"):
+                self.__sendPRIVMSG("haha")
+            elif(word1.isdigit()):
                 self.a_next(int(word1))
             elif(word1 == ''):
                 self.a_next(0)
