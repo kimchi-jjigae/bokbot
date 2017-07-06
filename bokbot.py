@@ -20,6 +20,8 @@ class BokBot:
     
     __prefix = "."
 
+    __dances = ["ruffles its pages", "beeps", "dusts itself off", "squeaks rustily", "dances", "flutters its eyelids"]
+
     def __init__(self, host, channel):
         self.__host = host
         self.__channel = channel
@@ -45,10 +47,26 @@ class BokBot:
         nick = lineHere[1:num]
         return nick
 
-    def __dance(self):
-        dances = ["ruffles its pages", "beeps", "dusts itself off", "squeaks rustily", "dances", "flutters its eyelids"]
-        random.shuffle(dances)
-        self.__sendPRIVMSG("\x01ACTION %s\x01" % dances[0])
+    def a_dance(self, message_words):
+        random.shuffle(self.__dances)
+        self.__sendPRIVMSG("\x01ACTION %s\x01" % self.__dances[0])
+
+    def a_next(self, message_words):
+        self.__sendPRIVMSG("Implement this command! (:")
+
+    def a_implement_me(self, message_words):
+        self.__sendPRIVMSG("Implement this command! :)")
+
+    __actions = {
+        'dance': a_dance,
+        'back': a_implement_me,
+        'define': a_implement_me,
+        'sentence': a_implement_me,
+        'add': a_implement_me,
+        'list': a_implement_me,
+        'load': a_implement_me,
+        'skipto': a_implement_me,
+    }
 
     def r_join(self, line):
         self.__send("JOIN %s\r\n" % self.__channel)
@@ -69,16 +87,22 @@ class BokBot:
 
         ## to make sure channel name is caps-insensitive
         bajs = re.compile("%s" % self.__channel, re.I)
-        channelMessage = bajs.findall(line)            
+        channel_message = bajs.findall(line)            
         sender = self.__getNick(line)
 
-        if channelMessage:                                  
-            message = line.split("%s :" % channelMessage[0])[1]
-            messageAsWords = message.split(" ")
+        if channel_message:                                  
+            message = line.split("%s :" % channel_message[0])[1]
+            message_words = message.split(" ")
 
-            if messageAsWords[0] == ".dance":
-                self.__dance()
-
+            word1 = message_words[0]
+            if(word1.isdigit()):
+                self.a_next(int(word1))
+            elif(word1 == ''):
+                self.a_next(0)
+            elif(word1[0] == self.__prefix):
+                action = word1[1:]
+                if action in self.__actions:
+                    self.__actions[action](self, message_words)
 
     __responses = {
         '001': r_join,
