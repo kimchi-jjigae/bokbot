@@ -7,6 +7,7 @@ import sys
 import socket
 import random
 from booksplitter import BookSplitter
+from wiktionaryparser import WiktionaryParser
 
 class BokBot:
     __port = 6667
@@ -86,7 +87,8 @@ class BokBot:
     def a_list(self, message_words):
         self.__sendPRIVMSG("Implement this command! (:")
     def a_load(self, message_words):
-        # change the topic to say what's being read
+        # load a book from the list
+        # also change the topic to say what's being read
         self.__sendPRIVMSG("Implement this command! (:")
     def a_skipto(self, message_words):
         self.__sendPRIVMSG("Implement this command! (:")
@@ -140,7 +142,6 @@ class BokBot:
                 action = word1[1:]
                 if action in self.__actions:
                     self.a_generic(action, message_words)
-                    #self.__actions[action](self, message_words, )
 
     __responses = {
         '001': r_join,
