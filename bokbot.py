@@ -22,6 +22,9 @@ class BokBot:
 
     __dances = ["ruffles its pages", "beeps", "dusts itself off", "squeaks rustily", "dances", "flutters its eyelids"]
 
+    __sentence = 0
+    __sentence_total = 0
+
     def __init__(self, host, channel):
         self.__host = host
         self.__channel = channel
@@ -47,20 +50,35 @@ class BokBot:
         nick = lineHere[1:num]
         return nick
 
+    def a_generic(self, action, message_words):
+        fn, n = self.__actions[action]
+        if(len(message_words) > n):
+            fn(self, message_words)
+        
     def a_dance(self, message_words):
         random.shuffle(self.__dances)
         self.__sendPRIVMSG("\x01ACTION %s\x01" % self.__dances[0])
 
-    def a_next(self, message_words):
+    def a_next(self, n):
+        # read out the next n sentences
         self.__sendPRIVMSG("Implement this command! (:")
 
     def a_back(self, message_words):
+        # go back n sentences
+        n = message_words[1]
+        if(n.isdigit()):
+            pass
+        else:
+            return
         self.__sendPRIVMSG("Implement this command! (:")
 
     def a_define(self, message_words):
+        # look up a word on wiktionary
+        word = message_words[1]
         self.__sendPRIVMSG("Implement this command! (:")
 
     def a_sentence(self, message_words):
+        # report which sentence the reader is up to
         self.__sendPRIVMSG("Implement this command! (:")
 
     def a_add(self, message_words):
@@ -74,15 +92,15 @@ class BokBot:
         self.__sendPRIVMSG("Implement this command! (:")
 
     __actions = {
-        'dance': a_dance,
-        'back': a_back,
-        'define': a_define,
-        'sentence': a_sentence,
+        'dance': (a_dance, 0),
+        'back': (a_back, 1),
+        'define': (a_define, 1),
+        'sentence': (a_sentence, 0),
 
-        'add': a_add,
-        'list': a_list,
-        'load': a_load,
-        'skipto': a_skipto,
+        'add': (a_add, 1),
+        'list': (a_list, 0),
+        'load': (a_load, 1),
+        'skipto': (a_skipto, 1)
     }
 
     def r_join(self, line):
@@ -117,11 +135,12 @@ class BokBot:
             elif(word1.isdigit()):
                 self.a_next(int(word1))
             elif(word1 == ''):
-                self.a_next(0)
+                self.a_next(1)
             elif(word1[0] == self.__prefix):
                 action = word1[1:]
                 if action in self.__actions:
-                    self.__actions[action](self, message_words)
+                    self.a_generic(action, message_words)
+                    #self.__actions[action](self, message_words, )
 
     __responses = {
         '001': r_join,
