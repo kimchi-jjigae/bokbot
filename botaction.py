@@ -5,6 +5,7 @@ class BotActor:
     def __init__(self):
         self.__actions = {
             'lol': (self.a_lol, 0),
+            'next': (self.a_next, 1),
 #        'dance': (a_dance, 0),
 #        'back': (a_back, 1),
 #        'define': (a_define, 1),
@@ -19,7 +20,7 @@ class BotActor:
     def act(self, action, message_words):
         if action in self.__actions:
             fn, n = self.__actions[action]
-            if(len(message_words) > n):
+            if(len(message_words) >= n):
                 return fn(message_words)
 
     def a_lol(self, message_words):
@@ -29,10 +30,11 @@ class BotActor:
 #        random.shuffle(self.__dances)
 #        self.__sendPRIVMSG("\x01ACTION %s\x01" % self.__dances[0])
 #
-#    def a_next(self, n):
-#        # read out the next n sentences
-#        self.__sendPRIVMSG("Implement this command! (:")
-#
+    def a_next(self, message_words):
+        # read out the next n sentences
+        n = int(message_words[0])
+        return str(n)
+
 #    def a_back(self, message_words):
 #        # go back n sentences
 #        n = message_words[1]

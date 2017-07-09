@@ -56,18 +56,20 @@ class BotResponder:
             message = line.split("%s :" % channel_message[0])[1]
             message_words = message.split(" ")
 
-            word1 = message_words[0]
+            word1 = message_words.pop(0)
+            a = None
             if(word1 == "lol" or word1 == "haha"):
                 a = self.__a.act('lol', message_words)
-                return self.__PRIVMSGify(a)
-#            elif(word1.isdigit()):
-#                self.a_next(int(word1))
-#            elif(word1 == ''):
-#                self.a_next(1)
+            elif(word1.isdigit()):
+                a = self.__a.act('next', [word1])
+            elif(word1 == ''):
+                a = self.__a.act('next', ['1'])
 #            elif(word1[0] == self.__prefix):
 #                action = word1[1:]
 #                if action in self.__actions:
 #                    self.a_generic(action, message_words)
+            if(a):
+                return self.__PRIVMSGify(a)
 
     def __getNick(self, lineHere):
         num = lineHere.find("!")
