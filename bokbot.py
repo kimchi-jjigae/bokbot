@@ -2,12 +2,10 @@
 # NB: the IRC protocol limits message lengths to 512 bytes, not just the
 # message part but of course the whole command etc.
 
-import re
 import sys
 import socket
 import random
 from booksplitter import BookSplitter
-#from botaction import BotAction
 from botresponse import BotResponder
 from wiktionaryparser import WiktionaryParser
 
@@ -41,7 +39,7 @@ class BokBot:
         self.__s.send(nick_string.encode())
         self.__s.send(user_string.encode())
 
-        self.__r = BotResponder(channel)
+        self.__r = BotResponder(channel, self.__nick)
     
     def __send(self, string):
         self.__s.send(string.encode())
