@@ -4,7 +4,6 @@
 
 import sys
 import socket
-import random
 from booksplitter import BookSplitter
 from botresponse import BotResponder
 from wiktionaryparser import WiktionaryParser
@@ -20,8 +19,6 @@ class BokBot:
     __names = []
     
     __prefix = "."
-
-    __dances = ["ruffles its pages", "beeps", "dusts itself off", "squeaks rustily", "dances", "flutters its eyelids"]
 
     __sentence = 0
     __sentence_total = 0
@@ -39,7 +36,7 @@ class BokBot:
         self.__s.send(nick_string.encode())
         self.__s.send(user_string.encode())
 
-        self.__r = BotResponder(channel, self.__nick)
+        self.__r = BotResponder(channel, self.__nick, self.__prefix)
     
     def __send(self, string):
         self.__s.send(string.encode())

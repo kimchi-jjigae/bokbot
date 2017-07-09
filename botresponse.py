@@ -12,9 +12,10 @@ class Response:
 class BotResponder:
     __a = BotActor()
 
-    def __init__(self, channel, nick):
+    def __init__(self, channel, nick, prefix):
         self.__channel = channel
         self.__nick = nick
+        self.__prefix = prefix
         self.__responses = {
             '001': self.r_join,
             'PART': self.r_bye,
@@ -64,10 +65,10 @@ class BotResponder:
                 a = self.__a.act('next', [word1])
             elif(word1 == ''):
                 a = self.__a.act('next', ['1'])
-#            elif(word1[0] == self.__prefix):
-#                action = word1[1:]
-#                if action in self.__actions:
-#                    self.a_generic(action, message_words)
+            elif(word1[0] == self.__prefix):
+                action = word1[1:]
+                a = self.__a.act(action, message_words)
+
             if(a):
                 return self.__PRIVMSGify(a)
 
