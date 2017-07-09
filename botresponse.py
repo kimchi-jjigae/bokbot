@@ -2,6 +2,7 @@
 # given commands, return strings, or something like that?
 
 from botaction import BotActor
+
 import re
 
 class Response:
@@ -33,19 +34,19 @@ class BotResponder:
             return r
 
     def r_join(self, line):
-        return "JOIN %s\r\n" % self.__channel
+        return ["JOIN %s\r\n" % self.__channel]
 
     def r_hi(self, line):
         nick = self.__getNick(line)
         if nick == self.__nick:
-            msg = "Hello %s! ^_^" % self.__channel
+            msg = ["Hello %s! ^_^" % self.__channel]
         else:
-            msg = "Hello %s :)" % nick
+            msg = ["Hello %s :)" % nick]
         return self.__PRIVMSGify(msg)
 
     def r_bye(self, line):
         nick = self.__getNick(line)
-        return self.__PRIVMSGify("Good bye %s (:" % nick)
+        return self.__PRIVMSGify(["Good bye %s (:" % nick])
 
     def r_read(self, line):
         ## to make sure channel name is caps-insensitive
@@ -77,5 +78,6 @@ class BotResponder:
         nick = lineHere[1:num]
         return nick
 
-    def __PRIVMSGify(self, message):
-        return "PRIVMSG %s :%s\r\n" % (self.__channel, message)
+    def __PRIVMSGify(self, messages):
+        # TODO: also divide into character limit
+        return ["PRIVMSG %s :%s\r\n" % (self.__channel, m) for m in messages]

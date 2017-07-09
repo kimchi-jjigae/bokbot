@@ -4,9 +4,7 @@
 
 import sys
 import socket
-from booksplitter import BookSplitter
 from botresponse import BotResponder
-from wiktionaryparser import WiktionaryParser
 
 class BokBot:
     __port = 6667
@@ -56,6 +54,8 @@ class BokBot:
                     self.__send(r)
                 else:
                     command = words[1]
-                    r = self.__r.respond(command, line)
-                    if(r):
-                        self.__send(r)
+                    # response is a list filled with commands/responses
+                    response = self.__r.respond(command, line)
+                    if(response):
+                        for r in response:
+                            self.__send(r)
