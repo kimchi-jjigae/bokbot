@@ -84,8 +84,8 @@ class BotActor:
                     quote = r.search(definition)
                     if quote:
                         definition = definition.split(quote[0])[0] + "."
-                    string = string + "%d. (%s) %s: %s " % (
-                        counter, speech, word, definition
+                    string = string + "%d. %s: %s " % (
+                        counter, speech, definition
                     )
                     counter += 1
                 strings.append(string)
