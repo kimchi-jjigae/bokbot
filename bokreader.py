@@ -32,7 +32,6 @@ class BokReader:
         return "You are on sentence %d of %d." % (
             self.__sentence, self.__sentence_total
         )
-        pass
 
     def add_book(self, url):
         #.add this.url/book.txt adds a book to its database

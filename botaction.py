@@ -2,6 +2,7 @@
 # given commands, return strings, or something like that? socket-independent.
 
 from wiktionaryparser import WiktionaryParser
+from bokreader import BokReader
 
 import random
 import re
@@ -67,7 +68,7 @@ class BotActor:
             return ["no definition found :o"]
         else:
             strings = []
-            r = re.compile("\.[\dA-Z]")
+            r = re.compile("( [\.a-z]+)[\dA-Z]")
             for c in content:
                 string = ""
                 counter = 1
@@ -82,7 +83,9 @@ class BotActor:
                     # will probably find false positives but whatevs
                     quote = r.search(definition)
                     if quote:
-                        definition = definition.split(quote[0])[0] + "."
+                        match = quote.group(0)
+                        last_word = quote.group(1)
+                        definition = definition.split(match)[0] + last_word
                     string = string + "%d. %s: %s " % (
                         counter, speech, definition
                     )
