@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-i
 # given commands, return strings, or something like that? socket-independent.
 
-from booksplitter import BookSplitter
 from wiktionaryparser import WiktionaryParser
 
 import random

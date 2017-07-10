@@ -18,9 +18,6 @@ class BokBot:
     
     __prefix = "."
 
-    __sentence = 0
-    __sentence_total = 0
-
 
     def __init__(self, host, channel):
         self.__host = host
