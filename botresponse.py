@@ -60,17 +60,17 @@ class BotResponder:
 
             word1 = message_words.pop(0)
             a = None
-            if(word1 == "lol" or word1 == "haha"):
+            if word1 == "lol" or word1 == "haha":
                 a = self.__a.act('lol', message_words)
-            elif(word1.isdigit()):
+            elif word1.isdigit():
                 a = self.__a.act('next', [word1])
-            elif(word1 == ''):
+            elif word1 == '':
                 a = self.__a.act('next', ['1'])
-            elif(word1[0] == self.__prefix):
+            elif word1[0] == self.__prefix:
                 action = word1[1:]
                 a = self.__a.act(action, message_words)
 
-            if(a):
+            if a :
                 return self.__PRIVMSGify(a)
 
     def __getNick(self, lineHere):

@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from booksplitter import BookSplitter
 from bokbot import BokBot
 

@@ -30,7 +30,7 @@ class BotActor:
         # return a list of strings to be PRIVMSGified as a response
         if action in self.__actions:
             fn, n = self.__actions[action]
-            if(len(message_words) >= n):
+            if len(message_words) >= n:
                 return fn(message_words)
 
     def a_lol(self, message_words):
@@ -42,8 +42,10 @@ class BotActor:
 
     def a_next(self, message_words):
         # read out the next n sentences
+        # have åtgärder for going out of range etc.
+        # reformat for IRC PMs
         n = message_words[0]
-        if(n.isdigit()):
+        if n.isdigit():
             n = int(n)
             pass
         else:
@@ -53,7 +55,7 @@ class BotActor:
     def a_back(self, message_words):
         # go back n sentences
         n = message_words[0]
-        if(n.isdigit()):
+        if n.isdigit():
             n = int(n)
             pass
         else:

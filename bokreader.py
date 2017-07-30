@@ -1,5 +1,7 @@
+# -*- coding: utf-8 -*-i
+
 class BokReader:
-    """Class which reads boks."""
+    """Class which reads boks from a MongoDB database."""
     def __init__(self):
         __sentence = 0
         __sentence_total = 0
@@ -16,7 +18,6 @@ class BokReader:
         pass
 
     def next_sentence(self):
-        # have åtgärder for going out of range etc.
         pass
 
     def back_up(self, n):

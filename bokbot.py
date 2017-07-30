@@ -53,6 +53,6 @@ class BokBot:
                     command = words[1]
                     # response is a list filled with commands/responses
                     response = self.__r.respond(command, line)
-                    if(response):
+                    if response:
                         for r in response:
                             self.__send(r)
