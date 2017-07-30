@@ -47,8 +47,8 @@ class BokBot:
 
                 words = line.split(" ")       # split line into words
                 if words[0] == "PING":
-                    r = self.__r.pong(words[1])
-                    self.__send(r)
+                    response = self.__r.pong(words[1])
+                    self.__send(response)
                 else:
                     command = words[1]
                     # response is a list filled with commands/responses
