@@ -38,7 +38,7 @@ class BokBot:
         
     def run(self):
         while 1:
-            self.__readbuffer = self.__readbuffer + self.__s.recv(1024).decode()
+            self.__readbuffer += self.__s.recv(1024).decode()
             temp = self.__readbuffer.split("\r\n")
             self.__readbuffer = temp.pop()
 
