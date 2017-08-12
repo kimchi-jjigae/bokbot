@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-i
 import re
+import datetime
 
 class BookSplitter:
     """Takes a book in the form of a .txt file and splits it up into a more
@@ -15,13 +16,14 @@ class BookSplitter:
         counter = 0
         extra = []
         book_content = {}
-        with open(text_file) as tf:
+        with open(text_file, 'r') as tf:
             sentence_list = []
             for text_line in tf:
                 # split line roughly into sentences, keep delimiter
+                # this'll btw be pretty weird with quotation marks
                 rough = re.split('([\.\?\!])', text_line)
                 # remove all blank "sentences"
-                rough = list(filter(lambda s: s != '', sentences))
+                rough = list(filter(lambda s: s != '', rough))
                 sentences = []
                 # look at every sentence
                 for i in range(0, len(rough), 2):
@@ -35,15 +37,20 @@ class BookSplitter:
 
                 # done with that line, so add to the sentences to the
                 # sentence list
-                sentence_list += sentences
+                print(type(sentence_list))
+                #print(type(sentences))
+                sentence_list.extend(sentences)
                 # if the sentence list is full, then add it to the book
                 # content
                 if len(sentence_list) >= 1000:
                     diff = len(sentence_list) - 1000
-                    extra = sentence_list[-diff]
+                    print(diff)
+                    extra = sentence_list[-diff:]
+                    print(extra)
                     key = str(counter).zfill(5)
                     book_content[key] = sentence_list[:]
-                    sentence_list = extra
+                    sentence_list = extra ####
+                    print(sentence_list)
                     extra = []
                     counter += 1
 
@@ -56,6 +63,7 @@ class BookSplitter:
         metadata = "Created in pre-alpha phase %s" % datetime.datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
 
         return {
+            #'book_id': book_id, # some type of identifier to make it easy to select a book
             'title': title,
             'author': author,
             'content': book_content,
