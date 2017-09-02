@@ -19,9 +19,9 @@ class BookSplitter:
         with open(text_file, 'r') as tf:
             sentence_list = []
             for text_line in tf:
-                # split line roughly into sentences, keep delimiter
+                # split line roughly into sentences and keep delimiter
                 # this'll btw be pretty weird with quotation marks
-                rough = re.split('([\.\?\!])', text_line)
+                rough = re.split('([\.\?\!;])', text_line)
                 # remove all blank "sentences"
                 rough = list(filter(lambda s: s != '', rough))
                 sentences = []
@@ -37,20 +37,15 @@ class BookSplitter:
 
                 # done with that line, so add to the sentences to the
                 # sentence list
-                print(type(sentence_list))
-                #print(type(sentences))
                 sentence_list.extend(sentences)
                 # if the sentence list is full, then add it to the book
                 # content
                 if len(sentence_list) >= 1000:
                     diff = len(sentence_list) - 1000
-                    print(diff)
                     extra = sentence_list[-diff:]
-                    print(extra)
                     key = str(counter).zfill(5)
-                    book_content[key] = sentence_list[:]
+                    book_content[key] = sentence_list[:-diff]
                     sentence_list = extra ####
-                    print(sentence_list)
                     extra = []
                     counter += 1
 
@@ -69,6 +64,5 @@ class BookSplitter:
             'content': book_content,
             'metadata': metadata,
         }
-
 #result = posts.insert_one(post_data)
 #print('One post: {0}'.format(result.inserted_id))

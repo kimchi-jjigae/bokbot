@@ -8,10 +8,18 @@ import random
 import re
 
 class BotActor:
-    __dances = ["ruffles its pages", "refactors its code", "beeps", "dusts itself off", "squeaks rustily", "dances", "flutters its eyelids"]
+    __dances = [
+        "ruffles its pages",
+        "refactors its code",
+        "beeps",
+        "dusts itself off",
+        "squeaks rustily",
+        "dances",
+        "flutters its eyelids"
+    ]
     __parser = WiktionaryParser()
 
-    def __init__(self):
+    def __init__(self, name="bokbot"):
         self.__actions = {
             'lol': (self.a_lol, 0),
             'next': (self.a_next, 1),
@@ -25,6 +33,11 @@ class BotActor:
             'load': (self.a_load, 1),
             'skipto': (self.a_skipto, 1)
         }
+        if name:
+            library = "library_%s" % name
+        else:
+            library = "library" % name
+        self.__bok_reader = BokReader(library=library)
 
     def act(self, action, message_words):
         # return a list of strings to be PRIVMSGified as a response
@@ -98,20 +111,26 @@ class BotActor:
 
 
     def a_sentence(self, message_words):
-        return ["Implement this command! :)"]
+        return self.bok_reader.sentence_status()
         # report which sentence the reader is up to
 #        return "You are on sentence %d of %d." % (
 #            self.__sentence, self.__sentence_total
 #        )
 
     def a_add(self, message_words):
+        #self.bok_reader.add_book_url(self, url, title="Unknown", author="Unknown"):
+        #self.__bok_adder.add_book_url(url, title, author)
         return ["Implement this command! (:"]
+
     def a_list(self, message_words):
-        return ["Implement this command! (:"]
+        return self.__bok_reader.list_books()
+
     def a_load(self, message_words):
+        book = message_words[0]
         # load a book from the list
         # also change the topic to say what's being read
         #:kim!kim@Clk-91B7221E.cust.bredband2.com TOPIC #bokbot :asdf
         return ["Implement this command! (:"]
+
     def a_skipto(self, message_words):
         return ["Implement this command! (:"]
