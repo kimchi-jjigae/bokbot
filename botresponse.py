@@ -50,8 +50,8 @@ class BotResponder:
 
     def r_read(self, line):
         ## to make sure channel name is caps-insensitive
-        bajs = re.compile("%s" % self.__channel, re.I)
-        channel_message = bajs.findall(line)            
+        result = re.compile("%s" % self.__channel, re.I)
+        channel_message = result.findall(line)            
         sender = self.__getNick(line)
 
         if channel_message: # as opposed to pm
